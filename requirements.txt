@@ -5,3 +5,4 @@ faiss-cpu>=1.7.4
 sentence-transformers>=2.2.0
 pydantic>=2.0.0
 pydantic-settings>=2.0.0
+streamlit>=1.32.0

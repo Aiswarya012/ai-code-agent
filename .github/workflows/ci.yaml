@@ -43,7 +43,7 @@ jobs:
           pip install mypy
 
       - name: Mypy
-        run: mypy agent/ tools/ memory/ utils/ config.py main.py --ignore-missing-imports
+        run: mypy agent/ tools/ memory/ utils/ config.py main.py app.py --ignore-missing-imports
 
   test:
     runs-on: ubuntu-latest

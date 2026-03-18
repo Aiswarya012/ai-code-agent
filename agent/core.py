@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -18,9 +19,15 @@ logger = logging.getLogger("ai_agent.core")
 FAILED_GENERATION_PATTERN = re.compile(r"<function=(\w+)\s*(\{.*?\})\s*</function>", re.DOTALL)
 MAX_RETRIES = 2
 
+EventCallback = Callable[[str, dict[str, Any]], None]
+
 
 class AgentCore:
-    def __init__(self, workspace: Path) -> None:
+    def __init__(
+        self,
+        workspace: Path,
+        on_event: EventCallback | None = None,
+    ) -> None:
         self._workspace = workspace.resolve()
         self._data_dir = settings.resolve_data_dir(self._workspace)
         self._data_dir.mkdir(parents=True, exist_ok=True)
@@ -31,6 +38,7 @@ class AgentCore:
         self._memory = ChatMemory(self._data_dir / "memory.json")
         self._system_prompt = build_system_prompt(self._workspace)
         self._tool_definitions = get_tool_definitions()
+        self.on_event = on_event
 
     @property
     def memory(self) -> ChatMemory:
@@ -39,6 +47,10 @@ class AgentCore:
     @property
     def vector_store(self) -> VectorStore:
         return self._vector_store
+
+    def _emit(self, event_type: str, data: dict[str, Any]) -> None:
+        if self.on_event:
+            self.on_event(event_type, data)
 
     def run(self, query: str) -> str:
         logger.info("User query: %s", query)
@@ -58,6 +70,10 @@ class AgentCore:
             if not tool_calls:
                 break
 
+            self._emit(
+                "iteration",
+                {"number": iteration + 1, "tool_count": len(tool_calls)},
+            )
             logger.info(
                 "Iteration %d: %d tool call(s)",
                 iteration + 1,
@@ -71,7 +87,12 @@ class AgentCore:
                 fn_args = json.loads(tc.function.arguments)
                 logger.info("Tool call: %s(%s)", fn_name, fn_args)
 
+                self._emit("tool_call_start", {"name": fn_name, "args": fn_args})
                 result = self._executor.execute(fn_name, fn_args)
+                self._emit(
+                    "tool_call_end",
+                    {"name": fn_name, "result_preview": result[:500]},
+                )
                 logger.debug("Tool result preview: %s", result[:200])
 
                 messages.append(
