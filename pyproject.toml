@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "ai-code-agent"
+name = "ai_code_agent"
 version = "1.0.0"
 description = "CLI-based AI codebase assistant using Groq API with RAG and tool-calling"
 requires-python = ">=3.10"
