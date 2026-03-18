@@ -101,8 +101,9 @@ def _format_args(node: ast.FunctionDef | ast.AsyncFunctionDef) -> str:
             annotation = ast.unparse(kw.annotation) if kw.annotation else ""
             name = kw.arg
             entry = f"{name}: {annotation}" if annotation else name
-            if j < len(args.kw_defaults) and args.kw_defaults[j]:
-                entry += f" = {ast.unparse(args.kw_defaults[j])}"
+            default = args.kw_defaults[j] if j < len(args.kw_defaults) else None
+            if default is not None:
+                entry += f" = {ast.unparse(default)}"
             parts.append(entry)
     if args.kwarg:
         parts.append(f"**{args.kwarg.arg}")

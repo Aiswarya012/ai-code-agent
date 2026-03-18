@@ -98,7 +98,7 @@ class AgentCore:
     def _call_llm(self, messages: list[dict[str, Any]]) -> ChatCompletion:
         for attempt in range(MAX_RETRIES + 1):
             try:
-                return self._client.chat.completions.create(
+                return self._client.chat.completions.create(  # type: ignore[call-overload]
                     model=settings.model,
                     max_tokens=settings.max_tokens,
                     tools=self._tool_definitions,
@@ -170,7 +170,7 @@ class AgentCore:
             }
         )
 
-        return self._client.chat.completions.create(
+        return self._client.chat.completions.create(  # type: ignore[call-overload]
             model=settings.model,
             max_tokens=settings.max_tokens,
             tools=self._tool_definitions,

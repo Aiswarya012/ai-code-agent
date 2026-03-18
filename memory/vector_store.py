@@ -95,6 +95,7 @@ class VectorStore:
             self.load()
 
         query_embedding = self._embed([query])
+        assert self._index is not None
         scores, indices = self._index.search(query_embedding, top_k)
 
         results: list[SearchResult] = []
