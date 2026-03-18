@@ -15,9 +15,7 @@ from memory.vector_store import VectorStore
 
 logger = logging.getLogger("ai_agent.core")
 
-FAILED_GENERATION_PATTERN = re.compile(
-    r'<function=(\w+)\s*(\{.*?\})\s*</function>', re.DOTALL
-)
+FAILED_GENERATION_PATTERN = re.compile(r"<function=(\w+)\s*(\{.*?\})\s*</function>", re.DOTALL)
 MAX_RETRIES = 2
 
 
@@ -76,11 +74,13 @@ class AgentCore:
                 result = self._executor.execute(fn_name, fn_args)
                 logger.debug("Tool result preview: %s", result[:200])
 
-                messages.append({
-                    "role": "tool",
-                    "tool_call_id": tc.id,
-                    "content": result,
-                })
+                messages.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": tc.id,
+                        "content": result,
+                    }
+                )
 
             response = self._call_llm(messages)
 
@@ -146,23 +146,29 @@ class AgentCore:
         result = self._executor.execute(fn_name, fn_args)
 
         fake_tool_call_id = f"recovered_{fn_name}_{id(exc)}"
-        messages.append({
-            "role": "assistant",
-            "content": "",
-            "tool_calls": [{
-                "id": fake_tool_call_id,
-                "type": "function",
-                "function": {
-                    "name": fn_name,
-                    "arguments": json.dumps(fn_args),
-                },
-            }],
-        })
-        messages.append({
-            "role": "tool",
-            "tool_call_id": fake_tool_call_id,
-            "content": result,
-        })
+        messages.append(
+            {
+                "role": "assistant",
+                "content": "",
+                "tool_calls": [
+                    {
+                        "id": fake_tool_call_id,
+                        "type": "function",
+                        "function": {
+                            "name": fn_name,
+                            "arguments": json.dumps(fn_args),
+                        },
+                    }
+                ],
+            }
+        )
+        messages.append(
+            {
+                "role": "tool",
+                "tool_call_id": fake_tool_call_id,
+                "content": result,
+            }
+        )
 
         return self._client.chat.completions.create(
             model=settings.model,

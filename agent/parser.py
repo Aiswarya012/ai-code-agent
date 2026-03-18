@@ -74,9 +74,7 @@ class ToolExecutor:
     def _list_files(self, directory: str = ".") -> str:
         return list_files(directory, self._workspace)
 
-    def _grep_code(
-        self, pattern: str, file_glob: str = "*.py", context_lines: int = 2
-    ) -> str:
+    def _grep_code(self, pattern: str, file_glob: str = "*.py", context_lines: int = 2) -> str:
         return grep_code(pattern, self._workspace, file_glob, context_lines)
 
     def _run_command(self, command: str) -> str:

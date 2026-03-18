@@ -225,15 +225,13 @@ def get_tool_definitions() -> list[dict[str, Any]]:
                         "path": {
                             "type": "string",
                             "description": (
-                                "Relative path to the Python file. "
-                                "Example: 'agent/core.py'"
+                                "Relative path to the Python file. Example: 'agent/core.py'"
                             ),
                         },
                         "function_name": {
                             "type": "string",
                             "description": (
-                                "Name of the function to analyze. "
-                                "Example: 'run_agent', '__init__'"
+                                "Name of the function to analyze. Example: 'run_agent', '__init__'"
                             ),
                         },
                     },
@@ -266,9 +264,7 @@ def get_tool_definitions() -> list[dict[str, Any]]:
             "type": "function",
             "function": {
                 "name": "git_diff",
-                "description": (
-                    "Show current staged and unstaged changes in the workspace."
-                ),
+                "description": ("Show current staged and unstaged changes in the workspace."),
                 "parameters": {
                     "type": "object",
                     "properties": {},

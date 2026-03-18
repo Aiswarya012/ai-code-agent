@@ -22,13 +22,34 @@ class Settings(BaseSettings):
     data_dir: Path = Field(default=Path("data"))
 
     SKIP_DIRS: set[str] = {
-        ".git", "__pycache__", ".venv", "venv", "node_modules",
-        ".mypy_cache", ".ruff_cache", ".pytest_cache", "dist",
-        "build", ".eggs", ".tox", "data",
+        ".git",
+        "__pycache__",
+        ".venv",
+        "venv",
+        "node_modules",
+        ".mypy_cache",
+        ".ruff_cache",
+        ".pytest_cache",
+        "dist",
+        "build",
+        ".eggs",
+        ".tox",
+        "data",
     }
     FILE_EXTENSIONS: set[str] = {
-        ".py", ".js", ".ts", ".go", ".rs", ".java", ".yaml",
-        ".yml", ".toml", ".json", ".md", ".sh", ".sql",
+        ".py",
+        ".js",
+        ".ts",
+        ".go",
+        ".rs",
+        ".java",
+        ".yaml",
+        ".yml",
+        ".toml",
+        ".json",
+        ".md",
+        ".sh",
+        ".sql",
     }
 
     def resolve_data_dir(self, workspace: Path) -> Path:

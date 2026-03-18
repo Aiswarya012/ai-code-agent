@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install ruff mypy
+          pip install ruff
 
       - name: Ruff lint
         run: ruff check .
@@ -39,10 +39,11 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -e ".[dev]"
+          pip install -r requirements.txt
+          pip install mypy
 
       - name: Mypy
-        run: mypy agent/ tools/ memory/ utils/ config.py main.py --ignore-missing-imports --no-namespace-packages
+        run: mypy agent/ tools/ memory/ utils/ config.py main.py --ignore-missing-imports
 
   test:
     runs-on: ubuntu-latest
@@ -56,7 +57,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -e ".[dev]"
+          pip install -r requirements.txt
+          pip install pytest
 
       - name: Run tests
         run: pytest tests/ -v --tb=short

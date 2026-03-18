@@ -25,7 +25,8 @@ def list_files(directory: str, workspace: Path) -> str:
             rel = item.relative_to(workspace)
             if item.is_dir():
                 child_count = sum(
-                    1 for c in item.iterdir()
+                    1
+                    for c in item.iterdir()
                     if c.name not in settings.SKIP_DIRS and not c.name.startswith(".")
                 )
                 entries.append(f"  {rel}/  ({child_count} items)")

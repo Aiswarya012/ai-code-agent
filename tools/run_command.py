@@ -2,14 +2,39 @@ import subprocess
 from pathlib import Path
 
 ALLOWED_COMMANDS = {
-    "python", "pytest", "ruff", "mypy", "black", "pip",
-    "ls", "wc", "head", "tail", "cat", "find", "tree",
+    "python",
+    "pytest",
+    "ruff",
+    "mypy",
+    "black",
+    "pip",
+    "ls",
+    "wc",
+    "head",
+    "tail",
+    "cat",
+    "find",
+    "tree",
 }
 
 BLOCKED_PATTERNS = {
-    "rm ", "rm\t", "rmdir", "sudo", "chmod", "chown",
-    "mv ", "mv\t", "dd ", "> /dev", "mkfs", "curl", "wget",
-    "ssh", "scp", "nc ", "ncat",
+    "rm ",
+    "rm\t",
+    "rmdir",
+    "sudo",
+    "chmod",
+    "chown",
+    "mv ",
+    "mv\t",
+    "dd ",
+    "> /dev",
+    "mkfs",
+    "curl",
+    "wget",
+    "ssh",
+    "scp",
+    "nc ",
+    "ncat",
 }
 
 MAX_OUTPUT_LENGTH = 20_000
